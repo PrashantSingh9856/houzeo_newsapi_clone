@@ -1,0 +1,40 @@
+services:
+  fastapi:
+    build: .
+    restart: always
+    container_name: fastapi
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    command: uvicorn app.app:app --host 0.0.0.0 --port 8000 --reload
+    networks:
+      - common-network
+
+  celery-worker:
+    build: .
+    restart: always
+    container_name: celery-worker
+    depends_on:
+      - fastapi
+    env_file:
+      - .env
+    command: celery -A app.celery_config:celery_app worker --loglevel=info -E --concurrency=2
+    networks:
+      - common-network
+
+  celery-beat:
+    build: .
+    restart: always
+    container_name: celery-beat
+    depends_on:
+      - fastapi
+    env_file:
+      - .env
+    command: celery -A app.celery_config:celery_app beat --loglevel=info
+    networks:
+      - common-network
+
+networks:
+  common-network:
+    driver: bridge
