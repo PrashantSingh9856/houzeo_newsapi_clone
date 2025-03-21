@@ -1,5 +1,6 @@
 services:
   fastapi:
+    image: ghcr.io/prashantsingh9856/houzeo_newsapi_clone:latest
     build: .
     restart: always
     container_name: fastapi
@@ -12,6 +13,7 @@ services:
       - common-network
 
   celery-worker:
+    image: ghcr.io/prashantsingh9856/houzeo_newsapi_clone:latest
     build: .
     restart: always
     container_name: celery-worker
@@ -24,6 +26,7 @@ services:
       - common-network
 
   celery-beat:
+    image: ghcr.io/prashantsingh9856/houzeo_newsapi_clone:latest
     build: .
     restart: always
     container_name: celery-beat
