@@ -8,35 +8,35 @@ services:
       - .env
     ports:
       - "8000:8000"
-    command: uvicorn app.app:app --host 0.0.0.0 --port 8000 --reload
+    entrypoint: ["/entrypoint.sh"] #uvicorn app.app:app --host 0.0.0.0 --port 8000 --reload
     networks:
       - common-network
 
-  celery-worker:
-    image: ghcr.io/prashantsingh9856/houzeo_newsapi_clone:latest
-    build: .
-    restart: always
-    container_name: celery-worker
-    depends_on:
-      - fastapi
-    env_file:
-      - .env
-    command: celery -A app.celery_config:celery_app worker --loglevel=info -E --concurrency=2
-    networks:
-      - common-network
+  # celery-worker:
+  #   image: ghcr.io/prashantsingh9856/houzeo_newsapi_clone:latest
+  #   build: .
+  #   restart: always
+  #   container_name: celery-worker
+  #   depends_on:
+  #     - fastapi
+  #   env_file:
+  #     - .env
+  #   command: celery -A app.celery_config:celery_app worker --loglevel=info -E --concurrency=2
+  #   networks:
+  #     - common-network
 
-  celery-beat:
-    image: ghcr.io/prashantsingh9856/houzeo_newsapi_clone:latest
-    build: .
-    restart: always
-    container_name: celery-beat
-    depends_on:
-      - fastapi
-    env_file:
-      - .env
-    command: celery -A app.celery_config:celery_app beat --loglevel=info
-    networks:
-      - common-network
+  # celery-beat:
+  #   image: ghcr.io/prashantsingh9856/houzeo_newsapi_clone:latest
+  #   build: .
+  #   restart: always
+  #   container_name: celery-beat
+  #   depends_on:
+  #     - fastapi
+  #   env_file:
+  #     - .env
+  #   command: celery -A app.celery_config:celery_app beat --loglevel=info
+  #   networks:
+  #     - common-network
 
 networks:
   common-network:
